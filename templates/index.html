@@ -13,14 +13,45 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #ffffff;
+            --text-primary: #00ffff;
+            --text-secondary: #00ff88;
+            --grid-color: rgba(0, 255, 255, 0.03);
+            --scanline-color: rgba(0, 255, 255, 0.03);
+            --particle-color: #00ffff;
+            --cursor-color: #00ffff;
+            --glow-color-1: #00ffff;
+            --glow-color-2: #00ff88;
+            --glow-color-3: #ff00ff;
+            --glow-color-4: #ffff00;
+        }
+
+        body.light-mode {
+            --bg-primary: #f5f5f5;
+            --bg-secondary: #ffffff;
+            --text-primary: #0066ff;
+            --text-secondary: #00aa44;
+            --grid-color: rgba(0, 102, 255, 0.08);
+            --scanline-color: rgba(0, 102, 255, 0.05);
+            --particle-color: #0066ff;
+            --cursor-color: #0066ff;
+            --glow-color-1: #0066ff;
+            --glow-color-2: #00aa44;
+            --glow-color-3: #aa00ff;
+            --glow-color-4: #ff6600;
+        }
+
         body {
             width: 100vw;
             height: 100vh;
             overflow: hidden;
-            background: #0a0a0a;
+            background: var(--bg-primary);
             font-family: 'Share Tech Mono', 'Courier New', monospace;
             cursor: none;
             position: relative;
+            transition: background 0.5s ease;
         }
 
         /* Grid overlay */
@@ -32,11 +63,12 @@
             width: 100%;
             height: 100%;
             background-image: 
-                linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
+                linear-gradient(var(--grid-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
             background-size: 50px 50px;
             z-index: 1;
             pointer-events: none;
+            transition: background-image 0.5s ease;
         }
 
         /* Scanline effect */
@@ -49,12 +81,13 @@
             height: 100%;
             background: linear-gradient(
                 transparent 50%,
-                rgba(0, 255, 255, 0.03) 50%
+                var(--scanline-color) 50%
             );
             background-size: 100% 4px;
             z-index: 100;
             pointer-events: none;
             animation: scanline 8s linear infinite;
+            transition: background 0.5s ease;
         }
 
         @keyframes scanline {
@@ -69,10 +102,11 @@
             transform: translate(-50%, -50%);
             text-align: center;
             z-index: 10;
-            color: #00ffff;
+            color: var(--text-primary);
             pointer-events: none;
             text-transform: uppercase;
             letter-spacing: 3px;
+            transition: color 0.5s ease;
         }
 
         h1 {
@@ -81,69 +115,71 @@
             font-weight: 900;
             margin-bottom: 1.5rem;
             text-shadow: 
-                0 0 10px #00ffff,
-                0 0 20px #00ffff,
-                0 0 30px #00ffff,
-                0 0 40px #00ffff;
+                0 0 10px var(--glow-color-1),
+                0 0 20px var(--glow-color-1),
+                0 0 30px var(--glow-color-1),
+                0 0 40px var(--glow-color-1);
             animation: glitch 3s infinite;
-            color: #00ffff;
+            color: var(--text-primary);
+            transition: color 0.5s ease, text-shadow 0.5s ease;
         }
 
         @keyframes glitch {
             0%, 100% {
                 text-shadow: 
-                    0 0 10px #00ffff,
-                    0 0 20px #00ffff,
-                    0 0 30px #00ffff;
+                    0 0 10px var(--glow-color-1),
+                    0 0 20px var(--glow-color-1),
+                    0 0 30px var(--glow-color-1);
             }
             25% {
                 text-shadow: 
-                    -2px 0 10px #ff00ff,
-                    2px 0 20px #00ffff,
-                    0 0 30px #00ffff;
+                    -2px 0 10px var(--glow-color-3),
+                    2px 0 20px var(--glow-color-1),
+                    0 0 30px var(--glow-color-1);
             }
             50% {
                 text-shadow: 
-                    2px 0 10px #00ffff,
-                    -2px 0 20px #ff00ff,
-                    0 0 30px #00ffff;
+                    2px 0 10px var(--glow-color-1),
+                    -2px 0 20px var(--glow-color-3),
+                    0 0 30px var(--glow-color-1);
             }
             75% {
                 text-shadow: 
-                    0 0 10px #00ffff,
-                    0 0 20px #00ffff,
-                    0 0 30px #00ffff;
+                    0 0 10px var(--glow-color-1),
+                    0 0 20px var(--glow-color-1),
+                    0 0 30px var(--glow-color-1);
             }
         }
 
         p {
             font-size: 1rem;
             opacity: 0.8;
-            color: #00ff88;
-            text-shadow: 0 0 5px #00ff88;
+            color: var(--text-secondary);
+            text-shadow: 0 0 5px var(--text-secondary);
             font-weight: 400;
+            transition: color 0.5s ease, text-shadow 0.5s ease;
         }
 
         .particle {
             position: absolute;
             width: 3px;
             height: 3px;
-            background: #00ffff;
+            background: var(--particle-color);
             pointer-events: none;
             box-shadow: 
-                0 0 6px #00ffff,
-                0 0 12px #00ffff;
+                0 0 6px var(--particle-color),
+                0 0 12px var(--particle-color);
             clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
         }
 
         .ripple {
             position: absolute;
-            border: 1px solid #00ffff;
+            border: 1px solid var(--cursor-color);
             pointer-events: none;
             animation: ripple-animation 1.5s ease-out forwards;
             box-shadow: 
-                0 0 10px #00ffff,
-                inset 0 0 10px #00ffff;
+                0 0 10px var(--cursor-color),
+                inset 0 0 10px var(--cursor-color);
         }
 
         @keyframes ripple-animation {
@@ -170,14 +206,14 @@
             position: absolute;
             width: 20px;
             height: 20px;
-            border: 2px solid #00ffff;
+            border: 2px solid var(--cursor-color);
             pointer-events: none;
             transform: translate(-50%, -50%);
-            transition: transform 0.05s ease-out;
+            transition: transform 0.05s ease-out, border-color 0.5s ease, box-shadow 0.5s ease;
             box-shadow: 
-                0 0 10px #00ffff,
-                0 0 20px #00ffff,
-                inset 0 0 10px #00ffff;
+                0 0 10px var(--cursor-color),
+                0 0 20px var(--cursor-color),
+                inset 0 0 10px var(--cursor-color);
             clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
         }
 
@@ -189,21 +225,68 @@
             transform: translate(-50%, -50%);
             width: 4px;
             height: 4px;
-            background: #00ffff;
-            box-shadow: 0 0 10px #00ffff;
+            background: var(--cursor-color);
+            box-shadow: 0 0 10px var(--cursor-color);
+            transition: background 0.5s ease, box-shadow 0.5s ease;
         }
 
         .tech-line {
             position: absolute;
-            background: linear-gradient(90deg, transparent, #00ffff, transparent);
+            background: linear-gradient(90deg, transparent, var(--cursor-color), transparent);
             height: 1px;
             pointer-events: none;
             opacity: 0.6;
-            box-shadow: 0 0 5px #00ffff;
+            box-shadow: 0 0 5px var(--cursor-color);
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: var(--bg-primary);
+            border: 2px solid var(--cursor-color);
+            color: var(--text-primary);
+            padding: 12px 24px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 
+                0 0 10px var(--cursor-color),
+                inset 0 0 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            pointer-events: auto;
+        }
+
+        .theme-toggle:hover {
+            box-shadow: 
+                0 0 20px var(--cursor-color),
+                inset 0 0 15px rgba(0, 0, 0, 0.3);
+            transform: scale(1.05);
+        }
+
+        .theme-toggle:active {
+            transform: scale(0.95);
+        }
+
+        body.light-mode .theme-toggle {
+            background: var(--bg-secondary);
+            box-shadow: 
+                0 0 10px var(--cursor-color),
+                inset 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        body.light-mode .theme-toggle:hover {
+            box-shadow: 
+                0 0 20px var(--cursor-color),
+                inset 0 0 15px rgba(255, 255, 255, 0.7);
         }
     </style>
 </head>
 <body>
+    <button class="theme-toggle" id="themeToggle">DARK MODE</button>
     <div class="container">
         <h1>&gt; Hello World</h1>
         <p>&gt; SYSTEM_READY: Move cursor to initialize tracking protocol</p>
@@ -213,30 +296,57 @@
     <script>
         const body = document.body;
         const cursorGlow = document.getElementById('cursorGlow');
+        const themeToggle = document.getElementById('themeToggle');
         let particles = [];
         let mouseX = window.innerWidth / 2;
         let mouseY = window.innerHeight / 2;
         let lastRippleTime = 0;
         let lastLineTime = 0;
+        let isDarkMode = true;
 
-        // Tech color palette
-        const colors = ['#00ffff', '#00ff88', '#ff00ff', '#ffff00'];
-        const getRandomColor = () => colors[Math.floor(Math.random() * colors.length)];
+        // Tech color palettes
+        const darkColors = ['#00ffff', '#00ff88', '#ff00ff', '#ffff00'];
+        const lightColors = ['#0066ff', '#00aa44', '#aa00ff', '#ff6600'];
+        
+        const getRandomColor = () => {
+            const colors = isDarkMode ? darkColors : lightColors;
+            return colors[Math.floor(Math.random() * colors.length)];
+        };
+
+        // Theme toggle functionality
+        themeToggle.addEventListener('click', () => {
+            isDarkMode = !isDarkMode;
+            body.classList.toggle('light-mode', !isDarkMode);
+            themeToggle.textContent = isDarkMode ? 'DARK MODE' : 'LIGHT MODE';
+            updateBackground(mouseX, mouseY);
+        });
 
         // Update background with tech gradient based on mouse position
         function updateBackground(x, y) {
             const percentX = (x / window.innerWidth) * 100;
             const percentY = (y / window.innerHeight) * 100;
             
-            // Create dark tech gradient with neon accents
             const intensity = Math.min(percentX + percentY, 100) / 100;
-            const cyanIntensity = Math.sin(intensity * Math.PI) * 0.15;
-            const greenIntensity = Math.cos(intensity * Math.PI) * 0.1;
             
-            body.style.background = `radial-gradient(circle at ${percentX}% ${percentY}%, 
-                rgba(0, 255, 255, ${cyanIntensity}) 0%,
-                rgba(0, 255, 136, ${greenIntensity}) 50%,
-                #0a0a0a 100%)`;
+            if (isDarkMode) {
+                // Dark mode gradient
+                const cyanIntensity = Math.sin(intensity * Math.PI) * 0.15;
+                const greenIntensity = Math.cos(intensity * Math.PI) * 0.1;
+                
+                body.style.background = `radial-gradient(circle at ${percentX}% ${percentY}%, 
+                    rgba(0, 255, 255, ${cyanIntensity}) 0%,
+                    rgba(0, 255, 136, ${greenIntensity}) 50%,
+                    #0a0a0a 100%)`;
+            } else {
+                // Light mode gradient
+                const blueIntensity = Math.sin(intensity * Math.PI) * 0.25;
+                const greenIntensity = Math.cos(intensity * Math.PI) * 0.15;
+                
+                body.style.background = `radial-gradient(circle at ${percentX}% ${percentY}%, 
+                    rgba(0, 102, 255, ${blueIntensity}) 0%,
+                    rgba(0, 170, 68, ${greenIntensity}) 50%,
+                    #f5f5f5 100%)`;
+            }
         }
 
         // Create tech particle at mouse position
