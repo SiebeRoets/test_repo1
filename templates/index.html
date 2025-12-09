@@ -43,6 +43,21 @@
             --glow-color-4: #ff6600;
         }
 
+        body.colorful-mode {
+            --bg-primary: #1a0033;
+            --bg-secondary: #ffffff;
+            --text-primary: #ff00ff;
+            --text-secondary: #00ffff;
+            --grid-color: rgba(255, 0, 255, 0.1);
+            --scanline-color: rgba(0, 255, 255, 0.08);
+            --particle-color: #ff00ff;
+            --cursor-color: #ff00ff;
+            --glow-color-1: #ff00ff;
+            --glow-color-2: #00ffff;
+            --glow-color-3: #ffff00;
+            --glow-color-4: #ff0066;
+        }
+
         body {
             width: 100vw;
             height: 100vh;
@@ -283,6 +298,22 @@
                 0 0 20px var(--cursor-color),
                 inset 0 0 15px rgba(255, 255, 255, 0.7);
         }
+
+        body.colorful-mode .theme-toggle {
+            background: var(--bg-primary);
+            box-shadow: 
+                0 0 15px var(--glow-color-1),
+                0 0 25px var(--glow-color-2),
+                inset 0 0 10px rgba(255, 0, 255, 0.3);
+        }
+
+        body.colorful-mode .theme-toggle:hover {
+            box-shadow: 
+                0 0 25px var(--glow-color-1),
+                0 0 35px var(--glow-color-2),
+                0 0 45px var(--glow-color-3),
+                inset 0 0 15px rgba(255, 0, 255, 0.5);
+        }
     </style>
 </head>
 <body>
@@ -302,22 +333,43 @@
         let mouseY = window.innerHeight / 2;
         let lastRippleTime = 0;
         let lastLineTime = 0;
-        let isDarkMode = true;
+        let themeMode = 'dark'; // 'dark', 'light', or 'colorful'
 
         // Tech color palettes
         const darkColors = ['#00ffff', '#00ff88', '#ff00ff', '#ffff00'];
         const lightColors = ['#0066ff', '#00aa44', '#aa00ff', '#ff6600'];
+        const colorfulColors = ['#ff00ff', '#00ffff', '#ffff00', '#ff0066', '#00ff66', '#ff6600', '#9900ff', '#00ff99'];
         
         const getRandomColor = () => {
-            const colors = isDarkMode ? darkColors : lightColors;
+            let colors;
+            if (themeMode === 'dark') {
+                colors = darkColors;
+            } else if (themeMode === 'light') {
+                colors = lightColors;
+            } else {
+                colors = colorfulColors;
+            }
             return colors[Math.floor(Math.random() * colors.length)];
         };
 
-        // Theme toggle functionality
+        // Theme toggle functionality - cycles through dark, light, colorful
         themeToggle.addEventListener('click', () => {
-            isDarkMode = !isDarkMode;
-            body.classList.toggle('light-mode', !isDarkMode);
-            themeToggle.textContent = isDarkMode ? 'DARK MODE' : 'LIGHT MODE';
+            if (themeMode === 'dark') {
+                themeMode = 'light';
+                body.classList.remove('colorful-mode');
+                body.classList.add('light-mode');
+                themeToggle.textContent = 'LIGHT MODE';
+            } else if (themeMode === 'light') {
+                themeMode = 'colorful';
+                body.classList.remove('light-mode');
+                body.classList.add('colorful-mode');
+                themeToggle.textContent = 'COLORFUL MODE';
+            } else {
+                themeMode = 'dark';
+                body.classList.remove('colorful-mode');
+                body.classList.remove('light-mode');
+                themeToggle.textContent = 'DARK MODE';
+            }
             updateBackground(mouseX, mouseY);
         });
 
@@ -328,7 +380,7 @@
             
             const intensity = Math.min(percentX + percentY, 100) / 100;
             
-            if (isDarkMode) {
+            if (themeMode === 'dark') {
                 // Dark mode gradient
                 const cyanIntensity = Math.sin(intensity * Math.PI) * 0.15;
                 const greenIntensity = Math.cos(intensity * Math.PI) * 0.1;
@@ -337,7 +389,7 @@
                     rgba(0, 255, 255, ${cyanIntensity}) 0%,
                     rgba(0, 255, 136, ${greenIntensity}) 50%,
                     #0a0a0a 100%)`;
-            } else {
+            } else if (themeMode === 'light') {
                 // Light mode gradient
                 const blueIntensity = Math.sin(intensity * Math.PI) * 0.25;
                 const greenIntensity = Math.cos(intensity * Math.PI) * 0.15;
@@ -346,6 +398,19 @@
                     rgba(0, 102, 255, ${blueIntensity}) 0%,
                     rgba(0, 170, 68, ${greenIntensity}) 50%,
                     #f5f5f5 100%)`;
+            } else {
+                // Colorful mode gradient - vibrant and dynamic
+                const magentaIntensity = Math.sin(intensity * Math.PI) * 0.3;
+                const cyanIntensity = Math.cos(intensity * Math.PI) * 0.25;
+                const yellowIntensity = Math.sin(intensity * Math.PI * 2) * 0.2;
+                const pinkIntensity = Math.cos(intensity * Math.PI * 2) * 0.15;
+                
+                body.style.background = `radial-gradient(circle at ${percentX}% ${percentY}%, 
+                    rgba(255, 0, 255, ${magentaIntensity}) 0%,
+                    rgba(0, 255, 255, ${cyanIntensity}) 30%,
+                    rgba(255, 255, 0, ${yellowIntensity}) 60%,
+                    rgba(255, 0, 102, ${pinkIntensity}) 80%,
+                    #1a0033 100%)`;
             }
         }
 
