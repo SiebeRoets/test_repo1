@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mouse Tracking Animation</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
+        
         * {
             margin: 0;
             padding: 0;
@@ -15,10 +17,49 @@
             width: 100vw;
             height: 100vh;
             overflow: hidden;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a0a;
+            font-family: 'Share Tech Mono', 'Courier New', monospace;
             cursor: none;
             position: relative;
+        }
+
+        /* Grid overlay */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Scanline effect */
+        body::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                transparent 50%,
+                rgba(0, 255, 255, 0.03) 50%
+            );
+            background-size: 100% 4px;
+            z-index: 100;
+            pointer-events: none;
+            animation: scanline 8s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(4px); }
         }
 
         .container {
@@ -28,44 +69,81 @@
             transform: translate(-50%, -50%);
             text-align: center;
             z-index: 10;
-            color: white;
+            color: #00ffff;
             pointer-events: none;
+            text-transform: uppercase;
+            letter-spacing: 3px;
         }
 
         h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
-            animation: pulse 2s ease-in-out infinite;
+            font-family: 'Orbitron', monospace;
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            text-shadow: 
+                0 0 10px #00ffff,
+                0 0 20px #00ffff,
+                0 0 30px #00ffff,
+                0 0 40px #00ffff;
+            animation: glitch 3s infinite;
+            color: #00ffff;
+        }
+
+        @keyframes glitch {
+            0%, 100% {
+                text-shadow: 
+                    0 0 10px #00ffff,
+                    0 0 20px #00ffff,
+                    0 0 30px #00ffff;
+            }
+            25% {
+                text-shadow: 
+                    -2px 0 10px #ff00ff,
+                    2px 0 20px #00ffff,
+                    0 0 30px #00ffff;
+            }
+            50% {
+                text-shadow: 
+                    2px 0 10px #00ffff,
+                    -2px 0 20px #ff00ff,
+                    0 0 30px #00ffff;
+            }
+            75% {
+                text-shadow: 
+                    0 0 10px #00ffff,
+                    0 0 20px #00ffff,
+                    0 0 30px #00ffff;
+            }
         }
 
         p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            font-size: 1rem;
+            opacity: 0.8;
+            color: #00ff88;
+            text-shadow: 0 0 5px #00ff88;
+            font-weight: 400;
         }
 
         .particle {
             position: absolute;
-            width: 4px;
-            height: 4px;
-            background: white;
-            border-radius: 50%;
+            width: 3px;
+            height: 3px;
+            background: #00ffff;
             pointer-events: none;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+            box-shadow: 
+                0 0 6px #00ffff,
+                0 0 12px #00ffff;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
         }
 
         .ripple {
             position: absolute;
-            border: 2px solid rgba(255, 255, 255, 0.6);
-            border-radius: 50%;
+            border: 1px solid #00ffff;
             pointer-events: none;
-            animation: ripple-animation 1s ease-out forwards;
+            animation: ripple-animation 1.5s ease-out forwards;
+            box-shadow: 
+                0 0 10px #00ffff,
+                inset 0 0 10px #00ffff;
         }
 
         @keyframes ripple-animation {
@@ -73,30 +151,62 @@
                 width: 20px;
                 height: 20px;
                 opacity: 1;
+                border-radius: 50%;
+            }
+            50% {
+                border-radius: 0%;
+                transform: translate(-50%, -50%) rotate(45deg);
             }
             100% {
-                width: 200px;
-                height: 200px;
+                width: 300px;
+                height: 300px;
                 opacity: 0;
+                border-radius: 0%;
+                transform: translate(-50%, -50%) rotate(45deg);
             }
         }
 
         .cursor-glow {
             position: absolute;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, transparent 70%);
+            width: 20px;
+            height: 20px;
+            border: 2px solid #00ffff;
             pointer-events: none;
             transform: translate(-50%, -50%);
-            transition: transform 0.1s ease-out;
+            transition: transform 0.05s ease-out;
+            box-shadow: 
+                0 0 10px #00ffff,
+                0 0 20px #00ffff,
+                inset 0 0 10px #00ffff;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        }
+
+        .cursor-glow::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 4px;
+            height: 4px;
+            background: #00ffff;
+            box-shadow: 0 0 10px #00ffff;
+        }
+
+        .tech-line {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, #00ffff, transparent);
+            height: 1px;
+            pointer-events: none;
+            opacity: 0.6;
+            box-shadow: 0 0 5px #00ffff;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Hello World!</h1>
-        <p>Move your mouse around to see the magic ✨</p>
+        <h1>&gt; Hello World</h1>
+        <p>&gt; SYSTEM_READY: Move cursor to initialize tracking protocol</p>
     </div>
     <div class="cursor-glow" id="cursorGlow"></div>
 
@@ -107,29 +217,39 @@
         let mouseX = window.innerWidth / 2;
         let mouseY = window.innerHeight / 2;
         let lastRippleTime = 0;
+        let lastLineTime = 0;
 
-        // Update background gradient based on mouse position
+        // Tech color palette
+        const colors = ['#00ffff', '#00ff88', '#ff00ff', '#ffff00'];
+        const getRandomColor = () => colors[Math.floor(Math.random() * colors.length)];
+
+        // Update background with tech gradient based on mouse position
         function updateBackground(x, y) {
             const percentX = (x / window.innerWidth) * 100;
             const percentY = (y / window.innerHeight) * 100;
             
-            const hue1 = (percentX / 100) * 360;
-            const hue2 = ((percentY / 100) * 360 + 60) % 360;
+            // Create dark tech gradient with neon accents
+            const intensity = Math.min(percentX + percentY, 100) / 100;
+            const cyanIntensity = Math.sin(intensity * Math.PI) * 0.15;
+            const greenIntensity = Math.cos(intensity * Math.PI) * 0.1;
             
-            body.style.background = `linear-gradient(135deg, 
-                hsl(${hue1}, 70%, 60%) 0%, 
-                hsl(${hue2}, 70%, 50%) 100%)`;
+            body.style.background = `radial-gradient(circle at ${percentX}% ${percentY}%, 
+                rgba(0, 255, 255, ${cyanIntensity}) 0%,
+                rgba(0, 255, 136, ${greenIntensity}) 50%,
+                #0a0a0a 100%)`;
         }
 
-        // Create particle at mouse position
+        // Create tech particle at mouse position
         function createParticle(x, y) {
             const particle = document.createElement('div');
             particle.className = 'particle';
             particle.style.left = x + 'px';
             particle.style.top = y + 'px';
+            particle.style.background = getRandomColor();
+            particle.style.boxShadow = `0 0 6px ${particle.style.background}, 0 0 12px ${particle.style.background}`;
             
             const angle = Math.random() * Math.PI * 2;
-            const velocity = 2 + Math.random() * 3;
+            const velocity = 1.5 + Math.random() * 2.5;
             const vx = Math.cos(angle) * velocity;
             const vy = Math.sin(angle) * velocity;
             
@@ -138,15 +258,19 @@
             let px = x;
             let py = y;
             let opacity = 1;
+            const rotation = Math.random() * 360;
+            let currentRotation = rotation;
             
             const animate = () => {
                 px += vx;
                 py += vy;
-                opacity -= 0.02;
+                opacity -= 0.015;
+                currentRotation += 5;
                 
                 particle.style.left = px + 'px';
                 particle.style.top = py + 'px';
                 particle.style.opacity = opacity;
+                particle.style.transform = `rotate(${currentRotation}deg)`;
                 
                 if (opacity > 0) {
                     requestAnimationFrame(animate);
@@ -158,16 +282,53 @@
             animate();
         }
 
-        // Create ripple effect
+        // Create tech ripple effect
         function createRipple(x, y) {
             const ripple = document.createElement('div');
             ripple.className = 'ripple';
             ripple.style.left = x + 'px';
             ripple.style.top = y + 'px';
-            ripple.style.transform = 'translate(-50%, -50%)';
+            ripple.style.borderColor = getRandomColor();
+            ripple.style.boxShadow = `0 0 10px ${ripple.style.borderColor}, inset 0 0 10px ${ripple.style.borderColor}`;
             body.appendChild(ripple);
             
-            setTimeout(() => ripple.remove(), 1000);
+            setTimeout(() => ripple.remove(), 1500);
+        }
+
+        // Create tech line effect
+        function createTechLine(x, y) {
+            const line = document.createElement('div');
+            line.className = 'tech-line';
+            const angle = Math.random() * Math.PI * 2;
+            const length = 50 + Math.random() * 100;
+            const endX = x + Math.cos(angle) * length;
+            const endY = y + Math.sin(angle) * length;
+            
+            const dx = endX - x;
+            const dy = endY - y;
+            const lineLength = Math.sqrt(dx * dx + dy * dy);
+            const lineAngle = Math.atan2(dy, dx) * 180 / Math.PI;
+            
+            line.style.width = lineLength + 'px';
+            line.style.left = x + 'px';
+            line.style.top = y + 'px';
+            line.style.transform = `rotate(${lineAngle}deg)`;
+            line.style.transformOrigin = '0 0';
+            line.style.background = `linear-gradient(90deg, transparent, ${getRandomColor()}, transparent)`;
+            
+            body.appendChild(line);
+            
+            let opacity = 0.8;
+            const fade = () => {
+                opacity -= 0.02;
+                line.style.opacity = opacity;
+                if (opacity > 0) {
+                    requestAnimationFrame(fade);
+                } else {
+                    line.remove();
+                }
+            };
+            fade();
         }
 
         // Mouse move handler
@@ -182,30 +343,36 @@
             // Update background
             updateBackground(mouseX, mouseY);
             
-            // Create particles occasionally
-            if (Math.random() > 0.7) {
+            // Create particles more frequently
+            if (Math.random() > 0.5) {
                 createParticle(mouseX, mouseY);
             }
             
-            // Create ripple every 200ms
+            // Create ripple every 300ms
             const now = Date.now();
-            if (now - lastRippleTime > 200) {
+            if (now - lastRippleTime > 300) {
                 createRipple(mouseX, mouseY);
                 lastRippleTime = now;
+            }
+            
+            // Create tech lines occasionally
+            if (now - lastLineTime > 150 && Math.random() > 0.7) {
+                createTechLine(mouseX, mouseY);
+                lastLineTime = now;
             }
         });
 
         // Initialize background
         updateBackground(mouseX, mouseY);
 
-        // Create initial particles
+        // Create ambient particles
         setInterval(() => {
-            if (particles.length < 50) {
+            if (particles.length < 30) {
                 const x = Math.random() * window.innerWidth;
                 const y = Math.random() * window.innerHeight;
                 createParticle(x, y);
             }
-        }, 100);
+        }, 200);
 
         // Handle window resize
         window.addEventListener('resize', () => {
